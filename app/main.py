@@ -7,24 +7,13 @@ def main():
     connection, address = server_socket.accept() # wait for client
 
     data = connection.recv(1024)
-    
-    """
-    print('data:')
-    print(data)
-    print('--------')
-    print('data.split():')
-    print(data.split())
-    print('------')
-    print("split()[2]")
-    print(data.split()[1])
-    """
 
     if data.split()[1] != b'/':
         connection.sendall(b'HTTP/1.1 404 Not Found\r\n\r\n') 
-        print('ERRROUUU')   
+        print('Connection Error')   
     else:
         connection.sendall(b'HTTP/1.1 200 OK\r\n\r\n')
-        print('ACERTO')   
+        print('Connection Success')   
    
     #connection.sendall(b'HTTP/1.1 200 OK\r\n\r\n')    
 
