@@ -16,19 +16,12 @@ def main():
     # if data.split()[1].startswith("/echo/"):
 
     if path.startswith('/echo/'):
-        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\{path[6:]}'
+        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
         connection.sendall(response.encode())
+    elif path == "/":
+        connection.sendall(b"HTTP/1.1 200 OK\r\n\r\n")
     else: 
         connection.sendall(b'HTTP/1.1 404 Not Found\r\n\r\n') 
-
-    # if data.split()[1] != b'/':
-    #     connection.sendall(b'HTTP/1.1 404 Not Found\r\n\r\n') 
-    #     print('Connection Error')   
-    # else:
-    #     connection.sendall(b'HTTP/1.1 200 OK\r\n\r\n')
-    #     print('Connection Success')
-
-    
 
 
 if __name__ == "__main__":
