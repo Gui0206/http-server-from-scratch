@@ -18,10 +18,8 @@ def main():
         headers[key] = value
 
     if path.startswith('/echo/'):
-        echo = headers.get("echo")
-        if echo:
-            response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(echo)}\r\n\r\n{echo}'
-            connection.sendall(response.encode())
+        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
+        connection.sendall(response.encode())
 
     elif path == "/":
         connection.sendall(b"HTTP/1.1 200 OK\r\n\r\n")
