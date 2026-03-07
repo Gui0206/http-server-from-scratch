@@ -22,9 +22,9 @@ def main():
         print(request_line)
     elif path == "/":
         connection.sendall(b"HTTP/1.1 200 OK\r\n\r\n")
-    elif path.startswith('/user-agent/'):
+    elif path.startswith('/user-agent'):
         print(request_line)
-        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(request_data[2][12:])}\r\n\r\nUser-Agent: {request_data[2][12:]}'
+        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(request_data[2][12:])}\r\n\r\n{request_data[2][12:]}'
         connection.sendall(response.encode())
     else: 
         connection.sendall(b'HTTP/1.1 404 Not Found\r\n\r\n') 
