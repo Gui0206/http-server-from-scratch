@@ -28,7 +28,7 @@ def handle_client(connection):
             if user_agent:
                 response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(user_agent)}\r\n\r\n{user_agent}'
         else: 
-            return 'HTTP/1.1 404 Not Found\r\n\r\n'
+            response = 'HTTP/1.1 404 Not Found\r\n\r\n'
         
         connection.sendall(response.encode())
 
