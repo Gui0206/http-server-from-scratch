@@ -42,7 +42,7 @@ def main():
     while True:
         connection, address = server_socket.accept()
 
-        client_thread = threading.Thread(target=handle_client, args=(connection,))
+        client_thread = threading.Thread(target=handle_client, args=(connection, address))
         client_thread.start()
 
 if __name__ == "__main__":
