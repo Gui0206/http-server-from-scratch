@@ -32,10 +32,9 @@ def handle_client(connection):
                 response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(user_agent)}\r\n\r\n{user_agent}'
         
         elif path.startswith('/files/'):
-            file_path = f'/tmp/{path[7:]}'
-            flag = sys.argv[0]
-            print(flag)
-            local_file_path = pathlib.Path(os.curdir, file_path)
+            file_path = path[7:]
+            flag = sys.argv[2]
+            local_file_path = pathlib.Path(flag, file_path)
             if local_file_path.exists() and local_file_path.is_file():
                 f = open(local_file_path)
                 file_content = f.read()
