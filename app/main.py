@@ -1,8 +1,8 @@
 import socket  # noqa: F401
 import threading
-import tempfile
 import os
 import pathlib
+import sys
 
 def handle_client(connection):
     try:
@@ -33,6 +33,8 @@ def handle_client(connection):
         
         elif path.startswith('/files/'):
             file_path = f'/tmp/{path[7:]}'
+            flag = sys.argv[0]
+            print(flag)
             local_file_path = pathlib.Path(os.curdir, file_path)
             if local_file_path.exists() and local_file_path.is_file():
                 f = open(local_file_path)
