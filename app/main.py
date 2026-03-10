@@ -34,11 +34,14 @@ def handle_client(connection):
         elif path.startswith('/files/'):
             file_path = f'/tmp/{path[7:]}'
             local_file_path = pathlib.Path(os.curdir, file_path)
-            f = open(local_file_path)
-            file_content = f.read()
-            file_size = len(file_content.encode())
-            response = f'HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {file_size}\r\n\r\n{file_content}'
-        
+            if local_file_path.exists() and local_file_path.is_file():
+                f = open(local_file_path)
+                file_content = f.read()
+                file_size = len(file_content.encode())
+                response = f'HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {file_size}\r\n\r\n{file_content}'
+                f.close()
+            else:
+                response = 'HTTP/1.1 404 Not Found\r\n\r\n'
         else: 
             response = 'HTTP/1.1 404 Not Found\r\n\r\n'
         
