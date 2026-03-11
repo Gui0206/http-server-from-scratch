@@ -45,9 +45,7 @@ def handle_client(connection):
                 f.close()
             elif method == 'POST':
                 new_file = open(local_file_path, 'w')
-
                 file_content = lines[-1]
-
                 new_file.write(file_content)
                 response = 'HTTP/1.1 201 Created\r\n\r\n'
                 new_file.close()
