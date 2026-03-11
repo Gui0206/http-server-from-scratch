@@ -42,7 +42,13 @@ def handle_client(connection):
                 response = f'HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {file_size}\r\n\r\n{file_content}'
                 f.close()
             else:
-                response = 'HTTP/1.1 404 Not Found\r\n\r\n'
+                new_file = open(local_file_path, 'w')
+
+                file_content = lines[-1]
+
+                new_file.write(file_content)
+                response = 'HTTP/1.1 201 Created\r\n\r\n'
+                new_file.close()
         else: 
             response = 'HTTP/1.1 404 Not Found\r\n\r\n'
         
