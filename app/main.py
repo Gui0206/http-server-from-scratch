@@ -51,6 +51,8 @@ def handle_client(connection):
                 new_file.write(file_content)
                 response = 'HTTP/1.1 201 Created\r\n\r\n'
                 new_file.close()
+            else:
+                response = 'HTTP/1.1 404 Not Found\r\n\r\n'
         else: 
             response = 'HTTP/1.1 404 Not Found\r\n\r\n'
         
