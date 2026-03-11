@@ -13,6 +13,8 @@ def handle_client(connection):
         lines = data.decode().split("\r\n")
         method, path, http_version = lines[0].split()
 
+        print(lines)
+
         headers = {}
         for line in lines[1:]:
             if line == "":
@@ -35,13 +37,13 @@ def handle_client(connection):
             file_path = path[7:]
             flag = sys.argv[2]
             local_file_path = pathlib.Path(flag, file_path)
-            if local_file_path.exists() and local_file_path.is_file():
+            if local_file_path.exists() and local_file_path.is_file() and method == 'GET':
                 f = open(local_file_path)
                 file_content = f.read()
                 file_size = len(file_content.encode())
                 response = f'HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {file_size}\r\n\r\n{file_content}'
                 f.close()
-            else:
+            elif method == 'POST':
                 new_file = open(local_file_path, 'w')
 
                 file_content = lines[-1]
