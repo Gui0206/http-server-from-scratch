@@ -1,4 +1,4 @@
-import socket  # noqa: F401
+import socket
 import threading
 import os
 import pathlib
@@ -15,6 +15,11 @@ def handle_client(connection):
 
         print(lines)
 
+        accept_encoding = [item for item in lines if item.startswith('Accept-Encoding')]
+
+        content_encoding = ''.join(accept_encoding)[17:]
+        print(content_encoding)
+
         headers = {}
         for line in lines[1:]:
             if line == "":
@@ -23,7 +28,13 @@ def handle_client(connection):
             headers[key] = value
 
         if path.startswith('/echo/'):
-            response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
+            accept_encoding = [item for item in lines if item.startswith('Accept-Encoding')]
+
+            content_encoding = ''.join(accept_encoding)[17:]
+            if content_encoding == 'gzip':
+                response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {content_encoding}\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
+            else:
+                response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
 
         elif path == "/":
             response = "HTTP/1.1 200 OK\r\n\r\n"
