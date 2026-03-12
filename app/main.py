@@ -22,12 +22,12 @@ def handle_client(connection):
             
         if path.startswith('/echo/'):
             suported_encoders = {'gzip'}
-
             accept_encoding = headers.get('Accept-Encoding').split(',')
             accept_encoding = {s.strip() for s in accept_encoding}
+            enconders_str = ''.join(suported_encoders)
 
             if suported_encoders.issubset(set(accept_encoding)):
-                response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {str(suported_encoders)}\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
+                response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
             else:
                 response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
 
