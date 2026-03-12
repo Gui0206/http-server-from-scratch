@@ -20,7 +20,10 @@ def handle_client(connection):
             key, value = line.split(": ", 1)
             headers[key] = value
 
+        print(headers.get('Accept-Encoding'))
+
         if path.startswith('/echo/'):
+            
             accept_encoding = [item for item in lines if item.startswith('Accept-Encoding')]
 
             content_encoding = ''.join(accept_encoding)[17:]
