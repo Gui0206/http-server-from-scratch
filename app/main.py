@@ -13,13 +13,6 @@ def handle_client(connection):
         lines = data.decode().split("\r\n")
         method, path, http_version = lines[0].split()
 
-        print(lines)
-
-        accept_encoding = [item for item in lines if item.startswith('Accept-Encoding')]
-
-        content_encoding = ''.join(accept_encoding)[17:]
-        print(content_encoding)
-
         headers = {}
         for line in lines[1:]:
             if line == "":
