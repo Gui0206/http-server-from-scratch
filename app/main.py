@@ -20,15 +20,11 @@ def handle_client(connection):
             key, value = line.split(": ", 1)
             headers[key] = value
 
-        print(headers.get('Accept-Encoding'))
-
         if path.startswith('/echo/'):
             
-            accept_encoding = [item for item in lines if item.startswith('Accept-Encoding')]
-
-            content_encoding = ''.join(accept_encoding)[17:]
-            if content_encoding == 'gzip':
-                response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {content_encoding}\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
+            accept_encoding = headers.get('Accept-Encoding')
+            if accept_encoding:
+                response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {accept_encoding}\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
             else:
                 response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
 
