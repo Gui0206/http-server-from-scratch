@@ -97,7 +97,7 @@ def handle_client(connection):
                     'Content-Length': file_size
                 }
                 #response = f'HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {file_size}\r\n\r\n{file_content}'
-                send_response(connection, '200 OK', response_headers, file_path.encode())
+                send_response(connection, '200 OK', response_headers, file_content.encode())
                 f.close()
             elif method == 'POST':
                 new_file = open(local_file_path, 'w')
