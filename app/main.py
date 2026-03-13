@@ -103,7 +103,8 @@ def handle_client(connection):
                 new_file = open(local_file_path, 'w')
                 file_content = lines[-1]
                 new_file.write(file_content)
-                response = 'HTTP/1.1 201 Created\r\n\r\n'
+                #response = 'HTTP/1.1 201 Created\r\n\r\n'
+                send_response(connection, '201 Created', {})
                 new_file.close()
             else:
                 #response = 'HTTP/1.1 404 Not Found\r\n\r\n'
