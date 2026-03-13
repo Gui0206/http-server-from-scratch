@@ -43,16 +43,23 @@ def handle_client(connection):
                         content_compress = gzip.compress(content_b)         
 
                         response_headers = {
-                            'Content=Type': 'text/plain',
+                            'Content-Type': 'text/plain',
                             'Content-Encoding': enconders_str,
                             'Content-Length': len(content_compress)
                         }                                       
 
-                        header = (f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(content_compress)}\r\n\r\n' )
+                        #header = (f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(content_compress)}\r\n\r\n' )
                         #response = header.encode('utf-8') + content_compress
                         send_response(connection, '200 OK', response_headers, content_compress)
+
                     else:
-                        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
+                        #response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
+                        response_headers = {
+                            'Content-Type': 'text/plain',
+                            'Content-Length': len(path[6:])
+                        }
+                        
+                        send_response(connection, '200 OK', response_headers, content_compress)
                 else:
                     response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
 
