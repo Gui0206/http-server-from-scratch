@@ -36,13 +36,10 @@ def handle_client(connection):
 
                         header = (f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(content_compress)}\r\n\r\n' )
                         response = header.encode('utf-8') + content_compress
-                        connection.sendall(response)
                     else:
                         response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
-                        connection.sendall(response.encode())
                 else:
                     response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
-                    connection.sendall(response.encode())
 
         elif path == "/":
             response = "HTTP/1.1 200 OK\r\n\r\n"
@@ -51,8 +48,7 @@ def handle_client(connection):
             user_agent = headers.get("User-Agent")
             if user_agent:
                 response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(user_agent)}\r\n\r\n{user_agent}'
-                connection.sendall(response.encode())
-
+        
         elif path.startswith('/files/'):
             file_path = path[7:]
             flag = sys.argv[2]
@@ -71,11 +67,10 @@ def handle_client(connection):
                 new_file.close()
             else:
                 response = 'HTTP/1.1 404 Not Found\r\n\r\n'
-                connection.sendall(response.encode())
         else: 
             response = 'HTTP/1.1 404 Not Found\r\n\r\n'
-            connection.sendall(response.encode())
         
+        connection.sendall(response.encode())
 
     finally: connection.close()
 
