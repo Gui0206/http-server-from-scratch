@@ -50,7 +50,7 @@ def handle_client(connection):
 
                         
 
-                        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(content_compress)}\r\nCompressed:{content_compress}'
+                        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(content_compress)}\r\nCompressed:{content_compress}\r\n'
                     else:
                         response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
                 else:
