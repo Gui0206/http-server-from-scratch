@@ -27,9 +27,6 @@ def handle_client(connection):
                 break
             key, value = line.split(": ", 1)
             headers[key] = value
-
-
-        
             
         if path.startswith('/echo/'):
                 content_b = path[6:].encode('utf-8')
@@ -66,7 +63,7 @@ def handle_client(connection):
                     send_response(connection, '200 OK', response_headers, content_b)
 
         elif path == "/":
-            send_response(connection, '200 OK', headers)
+            send_response(connection, '200 OK', {})
 
         elif path.startswith('/user-agent'):
             user_agent = headers.get("User-Agent").encode()
