@@ -41,7 +41,7 @@ def handle_client(connection):
                         content_b = content_str.encode('utf-8')
                         content_compress = gzip.compress(content_b)
 
-                        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(path[6:])}\r\n{content_compress}\r\n\r\n'
+                        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(path[6:])}\r\n {content_compress}\r\n\r\n'
                     else:
                         response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
                 else:
