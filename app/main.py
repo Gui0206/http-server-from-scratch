@@ -1,8 +1,8 @@
 import socket
 import threading
-import os
 import pathlib
 import sys
+import gzip
 
 def handle_client(connection):
     try:
@@ -19,6 +19,14 @@ def handle_client(connection):
                 break
             key, value = line.split(": ", 1)
             headers[key] = value
+
+        content_str = path[6:]
+        print(content_str)
+        content_b = content_str.encode('utf-8')
+        print(content_b)
+        content_compress = gzip.compress(content_b)
+
+        print(content_compress)
             
         if path.startswith('/echo/'):
                 if headers.get('Accept-Encoding'):
@@ -28,7 +36,12 @@ def handle_client(connection):
                     enconders_str = ''.join(suported_encoders)
 
                     if suported_encoders.issubset(set(accept_encoding)):
-                        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
+                        content_str = path[6:]
+                        #content_passing = ''.join(format(ord(char), '08b') for char in content_str)
+                        content_b = content_str.encode('utf-8')
+                        content_compress = gzip.compress(content_b)
+
+                        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(path[6:])}\r\n\r\n{content_compress}'
                     else:
                         response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
                 else:
