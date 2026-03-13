@@ -20,20 +20,6 @@ def handle_client(connection):
             key, value = line.split(": ", 1)
             headers[key] = value
 
-        print('lines - 1')
-        print(lines[-1])
-        print('path[6:]')
-        print(path[6:])
-        #print('teste')
-        #teste = gzip.compress(lines[-1])
-        #print(teste)
-        #print(lines[-1])
-        content_str = path[6:]
-        print(content_str)
-        content_b = content_str.encode('utf-8')
-        print(content_b)
-        content_compress = gzip.compress(content_b)
-
         print(content_compress)
             
         if path.startswith('/echo/'):
@@ -49,7 +35,7 @@ def handle_client(connection):
                         content_compress = gzip.compress(content_b)
                                                 
 
-                        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(content_compress)}\r\n Compressed:{str(content_compress)}\r\n\r\n'
+                        response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(content_compress)}\r\n\r\nCompressed:{str(content_compress)}'
                     else:
                         response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
                 else:
