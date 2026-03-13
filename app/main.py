@@ -78,7 +78,8 @@ def handle_client(connection):
         
         connection.sendall(response.encode())
 
-    finally: connection.close()
+    #finally: connection.close()
+    finally: print('heloooooo')
 
 
 def main():    
