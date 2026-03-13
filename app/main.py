@@ -31,6 +31,7 @@ def handle_client(connection):
         
             
         if path.startswith('/echo/'):
+                content_b = path[6:].encode('utf-8')
                 if headers.get('Accept-Encoding'):
                     suported_encoders = {'gzip'}
                     accept_encoding = headers.get('Accept-Encoding').split(',')
@@ -54,7 +55,7 @@ def handle_client(connection):
 
                     else:
                         #response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
-                        content_b = path[6:].encode('utf-8')
+                        
                         response_headers = {
                             'Content-Type': 'text/plain',
                             'Content-Length': len(path[6:])
@@ -62,7 +63,13 @@ def handle_client(connection):
                         
                         send_response(connection, '200 OK', response_headers, content_b)
                 else:
-                    response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
+                        #response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
+                    response_headers = {
+                            'Content-Type': 'text/plain',
+                            'Content-Length': len(path[6:])
+                        }
+                    send_response(connection, '200 OK', response_headers, content_b)
+
 
         elif path == "/":
             #response = "HTTP/1.1 200 OK\r\n\r\n"
