@@ -59,7 +59,7 @@ def handle_client(connection):
                             'Content-Length': len(path[6:])
                         }
                         
-                        send_response(connection, '200 OK', response_headers)
+                        send_response(connection, '200 OK', response_headers, path[6:])
                 else:
                     response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
 
