@@ -19,6 +19,16 @@ def handle_client(connection):
                 break
             key, value = line.split(": ", 1)
             headers[key] = value
+
+        def send_response(connection, status, headers, body=b''):
+            header_str = f'HTTP/1.1 {status}\r\n'
+            for key, value in headers.items():
+                header_str += f'{key}: {value}\r\n'
+            header_str += '\r\n'
+
+            full_response = header_str.encode('utf-8') + body
+            connection.sendall(full_response)
+        
             
         if path.startswith('/echo/'):
                 if headers.get('Accept-Encoding'):
@@ -30,19 +40,19 @@ def handle_client(connection):
                     if suported_encoders.issubset(set(accept_encoding)):
                         content_str = path[6:]
                         content_b = content_str.encode('utf-8')
-                        content_compress = gzip.compress(content_b)
-                        #content_compress = gzip.compress(bytes(content_str, "UTF-8"))
-                                                
+                        content_compress = gzip.compress(content_b)                                                
 
                         header = (f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(content_compress)}\r\n\r\n' )
-                        response = header.encode('utf-8') + content_compress
+                        #response = header.encode('utf-8') + content_compress
+                        send_response(connection, '200 OK', headers, content_compress)
                     else:
                         response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
                 else:
                     response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
 
         elif path == "/":
-            response = "HTTP/1.1 200 OK\r\n\r\n"
+            #response = "HTTP/1.1 200 OK\r\n\r\n"
+            send_response(connection, '200 OK', headers)
 
         elif path.startswith('/user-agent'):
             user_agent = headers.get("User-Agent")
@@ -70,9 +80,10 @@ def handle_client(connection):
         else: 
             response = 'HTTP/1.1 404 Not Found\r\n\r\n'
         
-        connection.sendall(response.encode())
+        #connection.sendall(response.encode())
 
-    finally: connection.close()
+    #finally: connection.close()
+    finally: print('uhuuu')
 
 
 def main():    
