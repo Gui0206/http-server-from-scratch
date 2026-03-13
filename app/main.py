@@ -40,11 +40,17 @@ def handle_client(connection):
                     if suported_encoders.issubset(set(accept_encoding)):
                         content_str = path[6:]
                         content_b = content_str.encode('utf-8')
-                        content_compress = gzip.compress(content_b)                                                
+                        content_compress = gzip.compress(content_b)         
+
+                        response_headers = {
+                            'Content=Type': 'text/plain',
+                            'Content-Encoding': enconders_str,
+                            'Content-Length': len(content_compress)
+                        }                                       
 
                         header = (f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(content_compress)}\r\n\r\n' )
                         #response = header.encode('utf-8') + content_compress
-                        send_response(connection, '200 OK', headers, content_compress)
+                        send_response(connection, '200 OK', response_headers, content_compress)
                     else:
                         response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
                 else:
