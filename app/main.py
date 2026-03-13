@@ -54,12 +54,13 @@ def handle_client(connection):
 
                     else:
                         #response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
+                        content_b = path[6:].encode()
                         response_headers = {
                             'Content-Type': 'text/plain',
                             'Content-Length': len(path[6:])
                         }
                         
-                        send_response(connection, '200 OK', response_headers, path[6:])
+                        send_response(connection, '200 OK', response_headers, content_b)
                 else:
                     response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
 
