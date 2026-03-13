@@ -5,7 +5,7 @@ import sys
 import gzip
 
 def handle_client(connection):
-    try:
+    
         data = connection.recv(1024)
         if not data:
             return
@@ -49,12 +49,9 @@ def handle_client(connection):
                             'Content-Length': len(content_compress)
                         }                                       
 
-                        #header = (f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Encoding: {enconders_str}\r\nContent-Length: {len(content_compress)}\r\n\r\n' )
-                        #response = header.encode('utf-8') + content_compress
                         send_response(connection, '200 OK', response_headers, content_compress)
 
                     else:
-                        #response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
                         
                         response_headers = {
                             'Content-Type': 'text/plain',
@@ -63,7 +60,6 @@ def handle_client(connection):
                         
                         send_response(connection, '200 OK', response_headers, content_b)
                 else:
-                        #response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(path[6:])}\r\n\r\n{path[6:]}'
                     response_headers = {
                             'Content-Type': 'text/plain',
                             'Content-Length': len(path[6:])
@@ -72,7 +68,6 @@ def handle_client(connection):
 
 
         elif path == "/":
-            #response = "HTTP/1.1 200 OK\r\n\r\n"
             send_response(connection, '200 OK', headers)
 
         elif path.startswith('/user-agent'):
@@ -82,7 +77,6 @@ def handle_client(connection):
                     'Content-Type': 'text/plain',
                     'Content-Length': len(user_agent)
                 }
-                #response = f'HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(user_agent)}\r\n\r\n{user_agent}'
                 send_response(connection, '200 OK', response_headers, user_agent)
         elif path.startswith('/files/'):
             file_path = path[7:]
@@ -96,7 +90,6 @@ def handle_client(connection):
                     'Content-Type': 'application/octet-stream',
                     'Content-Length': file_size
                 }
-                #response = f'HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {file_size}\r\n\r\n{file_content}'
                 send_response(connection, '200 OK', response_headers, file_content.encode())
                 f.close()
             elif method == 'POST':
@@ -107,15 +100,11 @@ def handle_client(connection):
                 send_response(connection, '201 Created', {})
                 new_file.close()
             else:
-                #response = 'HTTP/1.1 404 Not Found\r\n\r\n'
                 send_response(connection, '404 Not Found', {})
         else: 
-            #response = 'HTTP/1.1 404 Not Found\r\n\r\n'
             send_response(connection, '404 Not Found', {})
-        #connection.sendall(response.encode())
 
     #finally: connection.close()
-    finally: print('uhuuu')
 
 
 def main():    
