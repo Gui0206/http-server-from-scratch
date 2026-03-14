@@ -14,7 +14,7 @@ def send_response(connection, status, headers, body=b''):
 
 def handle_client(connection):
     while True:
-        data = connection.recv(1024, socket.MSG_PEEK)
+        data = connection.recv(1024)
         if not data:
             return
 
