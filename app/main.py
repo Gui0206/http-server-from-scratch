@@ -87,7 +87,7 @@ def handle_client(connection):
                     'Content-Length': file_size
                 }
                 send_response(connection, '200 OK', response_headers, file_content.encode())
-                #f.close()
+                f.close()
 
             elif method == 'POST':
                 new_file = open(local_file_path, 'w')
