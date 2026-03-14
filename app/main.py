@@ -100,8 +100,6 @@ def handle_client(connection):
 
         else: 
             send_response(connection, '404 Not Found', {})
-    # finally:
-    #     connection.close()
 
 def main():    
     
