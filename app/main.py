@@ -13,7 +13,7 @@ def send_response(connection, status, headers, body=b''):
     connection.sendall(full_response)
 
 def handle_client(connection):
-    try:
+    while True:
         data = connection.recv(1024, socket.MSG_PEEK)
         if not data:
             return
@@ -87,21 +87,21 @@ def handle_client(connection):
                     'Content-Length': file_size
                 }
                 send_response(connection, '200 OK', response_headers, file_content.encode())
-                f.close()
+                #f.close()
 
             elif method == 'POST':
                 new_file = open(local_file_path, 'w')
                 file_content = lines[-1]
                 new_file.write(file_content)
                 send_response(connection, '201 Created', {})
-                new_file.close()
+                #new_file.close()
             else:
                 send_response(connection, '404 Not Found', {})
 
         else: 
             send_response(connection, '404 Not Found', {})
-    finally:
-        connection.close()
+    # finally:
+    #     connection.close()
 
 def main():    
     
