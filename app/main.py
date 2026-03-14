@@ -4,9 +4,9 @@ import pathlib
 import sys
 import gzip
 
-def send_response(connection, status, headers, body=b''):
+def send_response(connection, status, response_headers, headers, body=b''):
     header_str = f'HTTP/1.1 {status}\r\n'
-    for key, value in headers.items():
+    for key, value in response_headers.items():
         header_str += f'{key}: {value}\r\n'
     header_str += '\r\n'
     full_response = header_str.encode('utf-8') + body
@@ -16,7 +16,7 @@ def handle_client(connection):
     while True:
         data = connection.recv(1024)
         if not data:
-            return
+            break
 
         lines = data.decode().split("\r\n")
         method, path, http_version = lines[0].split()
@@ -46,24 +46,24 @@ def handle_client(connection):
                             'Content-Encoding': enconders_str,
                             'Content-Length': len(content_compress)
                         }                                       
-                        send_response(connection, '200 OK', response_headers, content_compress)
+                        send_response(connection, '200 OK', response_headers, headers, content_compress)
 
                     else:
                         response_headers = {
                             'Content-Type': 'text/plain',
                             'Content-Length': len(path[6:])
                         }
-                        send_response(connection, '200 OK', response_headers, content_b)
+                        send_response(connection, '200 OK', response_headers, headers, content_b)
 
                 else:
                     response_headers = {
                             'Content-Type': 'text/plain',
                             'Content-Length': len(path[6:])
                         }
-                    send_response(connection, '200 OK', response_headers, content_b)
+                    send_response(connection, '200 OK', response_headers, headers, content_b)
 
         elif path == "/":
-            send_response(connection, '200 OK', {})
+            send_response(connection, '200 OK', {}, headers)
 
         elif path.startswith('/user-agent'):
             user_agent = headers.get("User-Agent").encode()
@@ -72,7 +72,7 @@ def handle_client(connection):
                     'Content-Type': 'text/plain',
                     'Content-Length': len(user_agent)
                 }
-                send_response(connection, '200 OK', response_headers, user_agent)
+                send_response(connection, '200 OK', response_headers, headers, user_agent)
 
         elif path.startswith('/files/'):
             file_path = path[7:]
@@ -86,20 +86,23 @@ def handle_client(connection):
                     'Content-Type': 'application/octet-stream',
                     'Content-Length': file_size
                 }
-                send_response(connection, '200 OK', response_headers, file_content.encode())
+                send_response(connection, '200 OK', response_headers, headers, file_content.encode())
                 f.close()
 
             elif method == 'POST':
                 new_file = open(local_file_path, 'w')
                 file_content = lines[-1]
                 new_file.write(file_content)
-                send_response(connection, '201 Created', {})
+                send_response(connection, '201 Created', {}, headers)
                 new_file.close()
             else:
-                send_response(connection, '404 Not Found', {})
+                send_response(connection, '404 Not Found', {}, headers)
 
         else: 
-            send_response(connection, '404 Not Found', {})
+            send_response(connection, '404 Not Found', {}, headers)
+
+        if headers.get('Connection') == 'close':
+            break
 
 def main():    
     
