@@ -13,15 +13,13 @@ def send_response(connection, status, headers, body=b''):
     connection.sendall(full_response)
 
 def handle_client(connection):
-    while True:
+    try:
         data = connection.recv(1024, socket.MSG_PEEK)
         if not data:
             return
 
         lines = data.decode().split("\r\n")
         method, path, http_version = lines[0].split()
-
-        print(data)
 
         headers = {}
         for line in lines[1:]:
@@ -102,6 +100,8 @@ def handle_client(connection):
 
         else: 
             send_response(connection, '404 Not Found', {})
+    finally:
+        connection.close()
 
 def main():    
     
