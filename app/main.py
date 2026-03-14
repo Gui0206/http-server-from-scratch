@@ -15,6 +15,9 @@ def send_response(connection, status, response_headers, headers, body=b''):
     full_response = header_str.encode('utf-8') + body
     connection.sendall(full_response)
 
+    if headers.get('Connection') == 'close':
+        connection.close()
+
 def handle_client(connection):
     while True:
         data = connection.recv(1024)
