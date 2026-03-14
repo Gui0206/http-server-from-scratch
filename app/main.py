@@ -5,6 +5,9 @@ import sys
 import gzip
 
 def send_response(connection, status, response_headers, headers, body=b''):
+    if headers.get('Connection') == 'close':
+        response_headers['Connection'] = 'close'
+    
     header_str = f'HTTP/1.1 {status}\r\n'
     for key, value in response_headers.items():
         header_str += f'{key}: {value}\r\n'
@@ -100,9 +103,6 @@ def handle_client(connection):
 
         else: 
             send_response(connection, '404 Not Found', {}, headers)
-
-        if headers.get('Connection') == 'close':
-            break
 
 def main():    
     
