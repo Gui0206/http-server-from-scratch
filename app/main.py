@@ -94,7 +94,7 @@ def handle_client(connection):
                 file_content = lines[-1]
                 new_file.write(file_content)
                 send_response(connection, '201 Created', {})
-                #new_file.close()
+                new_file.close()
             else:
                 send_response(connection, '404 Not Found', {})
 
