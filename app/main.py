@@ -127,7 +127,7 @@ def handle_client(connection, directory):
                     break
 
             if handler_function:
-                status, resp_headers, respo_body = handler_function(method, path, headers, body, directory)
+                status, resp_headers, resp_body = handler_function(method, path, headers, body, directory)
             else:
                 status, resp_headers, resp_body = '404 Not Found', {}, b''
 
