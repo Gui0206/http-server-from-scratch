@@ -15,7 +15,7 @@ def send_response(connection, status, response_headers, headers, body=b''):
     full_response = header_str.encode('utf-8') + body
     connection.sendall(full_response)
 
-def handle_client(connection):
+def handle_client(connection, directory):
     try:
         while True:
             data = connection.recv(4096)
@@ -82,8 +82,7 @@ def handle_client(connection):
 
             elif path.startswith('/files/'):
                 file_path = path[7:]
-                flag = sys.argv[2]
-                local_file_path = pathlib.Path(flag, file_path)
+                local_file_path = pathlib.Path(directory, file_path)
                 if local_file_path.exists() and local_file_path.is_file() and method == 'GET':
                     with open(local_file_path) as f:
                         file_content = f.read()
@@ -109,14 +108,15 @@ def handle_client(connection):
     finally:
         connection.close()
 
-def main():    
-    
+def main():        
     server_socket = socket.create_server(("localhost", 4221), reuse_port=True)
+
+    directory = sys.argv[2] if len(sys.argv) >= 3 and sys.argv[1] == '--directory' else '.'
 
     while True:
         connection, address = server_socket.accept()
 
-        client_thread = threading.Thread(target=handle_client, args=(connection, ))
+        client_thread = threading.Thread(target=handle_client, args=(connection, directory))
         client_thread.start()
 
 if __name__ == "__main__":
