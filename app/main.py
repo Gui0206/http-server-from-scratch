@@ -83,22 +83,20 @@ def handle_client(connection):
                 flag = sys.argv[2]
                 local_file_path = pathlib.Path(flag, file_path)
                 if local_file_path.exists() and local_file_path.is_file() and method == 'GET':
-                    f = open(local_file_path)
-                    file_content = f.read()
-                    file_size = len(file_content.encode())
-                    response_headers = {
-                        'Content-Type': 'application/octet-stream',
-                        'Content-Length': file_size
-                    }
-                    send_response(connection, '200 OK', response_headers, headers, file_content.encode())
-                    f.close()
+                    with open(local_file_path) as f:
+                        file_content = f.read()
+                        file_size = len(file_content.encode())
+                        response_headers = {
+                            'Content-Type': 'application/octet-stream',
+                            'Content-Length': file_size
+                        }
+                        send_response(connection, '200 OK', response_headers, headers, file_content.encode())
 
                 elif method == 'POST':
-                    new_file = open(local_file_path, 'w')
-                    file_content = lines[-1]
-                    new_file.write(file_content)
-                    send_response(connection, '201 Created', {}, headers)
-                    new_file.close()
+                    with open(local_file_path, 'w') as new_file:
+                        file_content = lines[-1]
+                        new_file.write(file_content)
+                        send_response(connection, '201 Created', {}, headers)
                 else:
                     send_response(connection, '404 Not Found', {}, headers)
             else: 
