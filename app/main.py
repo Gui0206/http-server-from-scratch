@@ -22,7 +22,9 @@ def handle_client(connection):
             if not data:
                 return
 
-            lines = data.decode().split("\r\n")
+            req, body = data.decode().split('\r\n\r\n')
+
+            lines = req.split("\r\n")
             method, path, http_version = lines[0].split()
 
             headers = {}
@@ -94,7 +96,7 @@ def handle_client(connection):
 
                 elif method == 'POST':
                     with open(local_file_path, 'w') as new_file:
-                        file_content = lines[-1]
+                        file_content = body
                         new_file.write(file_content)
                         send_response(connection, '201 Created', {}, headers)
                 else:
