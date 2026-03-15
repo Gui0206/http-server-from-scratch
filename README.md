@@ -1,37 +1,16 @@
-[![progress-banner](https://backend.codecrafters.io/progress/http-server/5b0bc3ed-9693-4cdf-b2f0-a35918bb9a1a)](https://app.codecrafters.io/users/codecrafters-bot?r=2qF)
+# 🚀 Build Your Own HTTP Server
 
-This is a starting point for Python solutions to the
-["Build Your Own HTTP server" Challenge](https://app.codecrafters.io/courses/http-server/overview).
+[![CodeCrafters](https://img.shields.io/badge/CodeCrafters-Challenge-blue)](https://app.codecrafters.io/courses/http-server/overview)
+[![Python](https://img.shields.io/badge/Python-3.x-yellow)](https://www.python.org/)
 
-[HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) is the
-protocol that powers the web. In this challenge, you'll build a HTTP/1.1 server
-that is capable of serving multiple clients.
+This repository contains my Python implementation for the **"Build Your Own HTTP server"** challenge by [CodeCrafters](https://codecrafters.io). 
 
-Along the way you'll learn about TCP servers,
-[HTTP request syntax](https://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html),
-and more.
+The goal of this project was to understand how the web actually works under the hood by building a functional HTTP server from scratch, without relying on external web frameworks like Flask or Django. I manipulated raw TCP sockets, handled byte streams, and manually parsed HTTP protocols.
 
-**Note**: If you're viewing this repo on GitHub, head over to
-[codecrafters.io](https://codecrafters.io) to try the challenge.
+## ✨ Features
 
-# Passing the first stage
+* **Concurrent Connections:** Handles multiple clients simultaneously using Python's `threading`.
+* **HTTP Parsing:** Manually extracts Methods, Paths, Headers, and Bodies from raw byte streams.
+* **GZIP Compression:** Reads the `Accept-Encoding` header and compresses responses on the fly.
+* **File Operations:** Serves files from the disk (`GET`) and saves uploaded files (`POST`).
 
-The entry point for your HTTP server implementation is in `app/main.py`. Study
-and uncomment the relevant code, and push your changes to pass the first stage:
-
-```sh
-git commit -am "pass 1st stage" # any msg
-git push origin master
-```
-
-Time to move on to the next stage!
-
-# Stage 2 & beyond
-
-Note: This section is for stages 2 and beyond.
-
-1. Ensure you have `uv` installed locally
-1. Run `./your_program.sh` to run your program, which is implemented in
-   `app/main.py`.
-1. Commit your changes and run `git push origin master` to submit your solution
-   to CodeCrafters. Test output will be streamed to your terminal.
