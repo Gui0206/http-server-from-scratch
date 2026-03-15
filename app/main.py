@@ -19,10 +19,10 @@ def send_response(connection, status, response_headers, headers, body=b''):
         connection.close()
 
 def handle_client(connection):
-    while True:
+    try:
         data = connection.recv(1024)
         if not data:
-            break
+            return
 
         lines = data.decode().split("\r\n")
         method, path, http_version = lines[0].split()
@@ -106,6 +106,8 @@ def handle_client(connection):
 
         else: 
             send_response(connection, '404 Not Found', {}, headers)
+    finally:
+        connection.close()
 
 def main():    
     
