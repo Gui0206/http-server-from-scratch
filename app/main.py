@@ -93,7 +93,7 @@ def handle_files(method, path, headers, body, directory):
     return '404 Not Found', {}, b''
 
 @route('/')
-def handle_root(method, path, headers, body, directoy)
+def handle_root(method, path, headers, body, directoy):
     if path == '/':
         return '200 OK', {}, b''
     return '400 Not Found', {}, b''
